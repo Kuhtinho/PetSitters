@@ -1,14 +1,14 @@
 package kuchta.com.controller.mapper;
 
 import kuchta.com.controller.dto.OrderRequestDto;
-import kuchta.com.model.orderrequest.OrderRequest;
+import kuchta.com.model.order.OrderRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class OrderRequestMapper {
 
-    public static List<OrderRequestDto> mapOrderRequestToOrderRequestList(List<OrderRequest> orderRequests) {
+    public static List<OrderRequestDto> mapOrderRequestToOrderRequestDtoList(List<OrderRequest> orderRequests) {
         return orderRequests.stream()
                 .map(OrderRequestMapper::mapToOrderRequestDto)
                 .collect(Collectors.toList());

@@ -1,11 +1,15 @@
 package kuchta.com.controller;
 
+import kuchta.com.controller.dto.OrderDto;
 import kuchta.com.controller.dto.OrderRequestDto;
 import kuchta.com.controller.dto.PetOwnerDto;
 import kuchta.com.controller.dto.PetSitterDto;
-import kuchta.com.model.orderrequest.OrderRequest;
+import kuchta.com.model.order.OrderRequest;
 import kuchta.com.model.petowner.PetOwner;
 import kuchta.com.model.petsitter.service.Service;
+import kuchta.com.repository.OrderRepository;
+import kuchta.com.service.order.OrderRequestService;
+import kuchta.com.service.order.OrderService;
 import kuchta.com.service.petowner.PetOwnerService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -21,9 +25,13 @@ import java.util.Set;
 public class PetOwnerController {
 
     private final PetOwnerService petOwnerService;
+    private final OrderService orderService;
+    private final OrderRequestService orderRequestService;
 
-    public PetOwnerController(PetOwnerService petOwnerService) {
+    public PetOwnerController(PetOwnerService petOwnerService, OrderService orderService, OrderRequestService orderRequestService) {
         this.petOwnerService = petOwnerService;
+        this.orderService = orderService;
+        this.orderRequestService = orderRequestService;
     }
 
     @PostMapping
@@ -66,13 +74,18 @@ public class PetOwnerController {
     @PostMapping("/orderRequests")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderRequest createOrderRequest(@RequestBody OrderRequestDto orderRequestDto) {
-        return petOwnerService.createOrderRequest(orderRequestDto);
+        return orderRequestService.createOrderRequest(orderRequestDto);
     }
 
-    @PutMapping("/orderRequests{id}")
+    @PutMapping("/orderRequests{orderRequestId}")
     @ResponseStatus(HttpStatus.OK)
-    public OrderRequest updateOrderRequest(@PathVariable Long id, @RequestBody @Valid OrderRequestDto orderRequestDto) {
-        return petOwnerService.updateOrderRequest(id, orderRequestDto);
+    public OrderRequest updateOrderRequest(@PathVariable Long orderRequestId, @RequestBody @Valid OrderRequestDto orderRequestDto) {
+        return petOwnerService.updateOrderRequest(orderRequestId, orderRequestDto);
+    }
+
+    @GetMapping("{petOwnerId}/orders")
+    public List<OrderDto> getOrders(@PathVariable Long petOwnerId) {
+        return orderService.getOrders(petOwnerId);
     }
 
 }

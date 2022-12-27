@@ -1,4 +1,4 @@
-package kuchta.com.model.orderrequest;
+package kuchta.com.model.order;
 
 import kuchta.com.model.petsitter.PetSitter;
 import lombok.*;

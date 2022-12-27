@@ -1,5 +1,6 @@
-package kuchta.com.model.orderrequest;
+package kuchta.com.model.order;
 
+import kuchta.com.model.petowner.PetOwner;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +16,6 @@ public class Order {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "order_request_id")
@@ -29,4 +29,8 @@ public class Order {
 
     @Column(name = "payed")
     private Integer payed;
+
+    @ManyToOne
+    @JoinColumn(name="pet_owner_id", nullable=false)
+    private PetOwner petOwner;
 }

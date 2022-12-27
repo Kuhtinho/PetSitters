@@ -3,11 +3,10 @@ package kuchta.com.service.petowner;
 import kuchta.com.controller.dto.OrderRequestDto;
 import kuchta.com.controller.dto.PetOwnerDto;
 import kuchta.com.controller.dto.PetSitterDto;
-import kuchta.com.controller.mapper.OrderRequestMapper;
 import kuchta.com.controller.mapper.PetOwnerMapper;
 import kuchta.com.controller.mapper.PetSitterMapper;
 import kuchta.com.exceptions.ResourceNotFoundException;
-import kuchta.com.model.orderrequest.OrderRequest;
+import kuchta.com.model.order.OrderRequest;
 import kuchta.com.model.petowner.PetOwner;
 import kuchta.com.model.petsitter.PetSitter;
 import kuchta.com.repository.OrderRequestRepository;
@@ -83,10 +82,6 @@ public class PetOwnerService {
         return PetSitterMapper.mapToPetSitterDto(petSitterRepository.getPetSitterById(petSitterId));
     }
 
-    public OrderRequest createOrderRequest(OrderRequestDto orderRequestDto) {
-        return orderRequestRepository.save(OrderRequestMapper.mapToOrderRequest(orderRequestDto));
-    }
-
     public OrderRequest updateOrderRequest(Long id, OrderRequestDto orderRequestDto) {
         return orderRequestRepository.findById(id)
                 .map(orderRequest -> {
@@ -99,5 +94,5 @@ public class PetOwnerService {
                         () -> new ResourceNotFoundException("Not found Order Request with id = " + id)
                 );
     }
-
 }
+

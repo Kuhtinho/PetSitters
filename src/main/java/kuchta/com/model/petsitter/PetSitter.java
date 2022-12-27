@@ -1,11 +1,12 @@
 package kuchta.com.model.petsitter;
 
-import kuchta.com.model.orderrequest.OrderRequest;
+import kuchta.com.model.order.OrderRequest;
 import kuchta.com.model.petsitter.service.Service;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -66,5 +67,5 @@ public class PetSitter {
     private Set<Service> petSitterServices;
 
     @OneToMany(mappedBy = "petSitter")
-    private Set<OrderRequest> orderRequests;
+    private List<OrderRequest> orderRequests;
 }

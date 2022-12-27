@@ -1,9 +1,11 @@
 package kuchta.com.model.petowner;
 
+import kuchta.com.model.order.Order;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "pet_owners")
@@ -57,4 +59,7 @@ public class PetOwner {
 
     @Column(name = "pet_sitter_photo_id")
     private Long petOwnerPhotoId;
+
+    @OneToMany(mappedBy = "petOwner")
+    private List<Order> orders;
 }
