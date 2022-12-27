@@ -1,58 +1,62 @@
 package kuchta.com.controller;
 
-import kuchta.com.model.Order;
-import kuchta.com.model.OrderRequest;
+import kuchta.com.controller.dto.OrderDto;
+import kuchta.com.controller.dto.OrderRequestDto;
+
+import kuchta.com.controller.dto.PetSitterDto;
+import kuchta.com.model.orderrequest.Order;
 import kuchta.com.model.petsitter.PetSitter;
-import kuchta.com.service.requestorder.OrderRequestService;
-import kuchta.com.service.requestorder.OrderService;
 import kuchta.com.service.petsitter.PetSitterService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.List;
+
 @RestController
-@RequestMapping("/petsitters")
+@RequestMapping("/petSitters")
 public class PetSitterController {
 
-    @Autowired
-    PetSitterService petSitterService;
-    @Autowired
-    OrderRequestService orderRequestService;
-    @Autowired
-    OrderService orderService;
+    private final PetSitterService petSitterService;
 
+    public PetSitterController(PetSitterService petSitterService) {
+        this.petSitterService = petSitterService;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PetSitter createPetSitter(@RequestBody @Valid PetSitterDto petSitterDto) {
+        return petSitterService.createPetSitter(petSitterDto);
+    }
+
+    @PutMapping({"{petSitterId}"})
+    public PetSitter updatePetSitter(@PathVariable Long petSitterId, @RequestBody @Valid PetSitterDto petSitterDto) {
+        return petSitterService.updatePetSitter(petSitterId, petSitterDto);
+    }
 
     @GetMapping("/{petSitterId}")
-    PetSitter getPetSitter(@PathVariable int petSitterId) {
-        return petSitterService.getPetSitter(petSitterId);
-/*          return json with all information about petsitter
-            (name, surname, address, mail, phone number, description, attachments)*/
+    public PetSitterDto getPetOwner(@PathVariable Long petSitterId) {
+        return petSitterService.getPetOwner(petSitterId);
     }
 
-    @GetMapping("/order-request/{petSitterId}")
-    OrderRequest getOrderRequest(@PathVariable int petSitterId) {
-        return orderRequestService.getOrderRequest(petSitterId);
-/*           return list of services,
-             type of contract (call/meet or sign the document),
-             date of service*/
+    @GetMapping("{petSitterId}/orderRequests")
+    public List<OrderRequestDto> getOrderRequests(@PathVariable Long petSitterId) {
+        return petSitterService.getOrderRequests(petSitterId);
     }
 
-    @DeleteMapping("/order-request/{orderRequest}") //after declining order request by pet sitter
-    void deleteOrderRequest(@PathVariable int orderRequest) {
-        orderRequestService.deleteOrderRequest(orderRequest);
+    @DeleteMapping("{orderRequestId}") //after declining order request by pet sitter
+    public void deleteOrderRequest(@PathVariable Long orderRequestId ) {
+        petSitterService.deleteOrderRequest(orderRequestId);
     }
 
-    @PostMapping("orders/") //after submitting order request by pet sitter
-    Order newOrder(@RequestBody Order newOrder) {
-        return orderService.addNewOrder(newOrder);
+    @PostMapping("orders/")//after submitting order request by pet sitter
+    @ResponseStatus(HttpStatus.CREATED)
+    public Order newOrder(@RequestBody OrderDto orderDto) {
+        return petSitterService.newOrder(orderDto);
     }
 
-    @PutMapping("orders/{orderId}") //after submitting order by pet sitter
-    Order submitOrder(@PathVariable int orderId) {
-        return orderService.submitOrder(orderId);
-    }
-
-    @DeleteMapping("/orders/{orderId}") //after declining order request by pet sitter
-    void deleteOrder(@PathVariable int orderId) {
-        orderService.deleteOrder(orderId);
+    @PutMapping("orders/{orderId}")
+    public Order updateOrder(@PathVariable Long orderId, @RequestBody @Valid OrderDto orderDto) {
+        return petSitterService.updateOrder(orderId, orderDto);
     }
 }

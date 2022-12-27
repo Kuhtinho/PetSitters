@@ -14,5 +14,5 @@ public interface PetSitterRepository extends JpaRepository<PetSitter, Long> {
 
     PetSitter getPetSitterById(Long petSitterId);
 
-    List<PetSitter> findPetSittersByServiceId(Long serviceId);
+    List<PetSitter> findPetSittersByPetSitterServicesId(Long serviceId);
 }
