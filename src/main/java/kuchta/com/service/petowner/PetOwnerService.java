@@ -36,17 +36,21 @@ public class PetOwnerService {
         this.orderRequestRepository = orderRequestRepository;
     }
 
-    public PetOwner newPetSitter(PetOwnerDto petOwnerDto) {
+    public PetOwner createPetSitter(PetOwnerDto petOwnerDto) {
         return petOwnerRepository.save(PetOwnerMapper.mapToPetOwner(petOwnerDto));
     }
 
-    public PetOwner updatePetOwner(Long id, PetOwnerDto petOwnerDto) {
-        return petOwnerRepository.findById(id)
+    public PetOwnerDto getPetOwner(Long petOwnerId) { // get pet owner profile (when pet owner clicks 'home')
+        return PetOwnerMapper.mapToPetOwnerDto(petOwnerRepository.getPetOwnerById(petOwnerId));
+    }
+
+    public void updatePetOwner(Long id, PetOwnerDto petOwnerDto) {
+        petOwnerRepository.findById(id)
                 .map(petOwner -> {
                     petOwner.setCity(petOwnerDto.city());
                     petOwner.setUserDescription(petOwnerDto.userDescription());
                     petOwner.setHomeDescription(petOwnerDto.homeDescription());
-                    petOwner.setPetDescription(petOwnerDto.petDescription() );
+                    petOwner.setPetDescription(petOwnerDto.petDescription());
                     petOwner.setCity(petOwnerDto.city());
                     petOwner.setPesel(petOwnerDto.pesel());
                     petOwner.setPostcode(petOwnerDto.postcode());
@@ -56,6 +60,10 @@ public class PetOwnerService {
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Not found Pet Owner with id = " + id)
                 );
+    }
+
+    public void deletePetOwner(Long id) {
+        petOwnerRepository.deleteById(id);
     }
 
     public List<PetSitterDto> getPetSittersByProperties(String city,
@@ -69,10 +77,6 @@ public class PetOwnerService {
                                 petSitter.getPetSitterServices().equals(services))
                 .toList();
         return PetSitterMapper.mapPetSitterToPetSitterDtoList(neededPetSitters);
-    }
-
-    public PetOwnerDto getPetOwner(Long petOwnerId) { // get pet owner profile (when pet owner clicks 'home')
-        return PetOwnerMapper.mapToPetOwnerDto(petOwnerRepository.getPetOwnerById(petOwnerId));
     }
 
     public PetSitterDto getPetSitter(Long petSitterId) { // get profile of suitable pet sitter from list

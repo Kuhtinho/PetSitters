@@ -8,7 +8,6 @@ import kuchta.com.controller.mapper.OrderRequestMapper;
 import kuchta.com.controller.mapper.PetSitterMapper;
 import kuchta.com.exceptions.ResourceNotFoundException;
 import kuchta.com.model.orderrequest.Order;
-import kuchta.com.model.orderrequest.OrderRequest;
 import kuchta.com.model.petsitter.PetSitter;
 import kuchta.com.repository.OrderRepository;
 import kuchta.com.repository.OrderRequestRepository;
@@ -16,7 +15,6 @@ import kuchta.com.repository.PetSitterRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class PetSitterService {
@@ -37,8 +35,12 @@ public class PetSitterService {
         return petSitterRepository.save(PetSitterMapper.mapToPetSitter(petSitterDto));
     }
 
-    public PetSitter updatePetSitter(Long petSitterId, PetSitterDto petSitterDto) {
-        return petSitterRepository.findById(petSitterId)
+    public PetSitterDto getPetSitter(Long petSitterId) {
+        return PetSitterMapper.mapToPetSitterDto(petSitterRepository.getPetSitterById(petSitterId));
+    }
+
+    public void updatePetSitter(Long petSitterId, PetSitterDto petSitterDto) {
+        petSitterRepository.findById(petSitterId)
                 .map(petSitter -> {
                     petSitter.setCity(petSitterDto.city());
                     petSitter.setUserDescription(petSitterDto.userDescription());
@@ -53,13 +55,22 @@ public class PetSitterService {
                 );
     }
 
-    public PetSitterDto getPetOwner(Long petSitterId) {
-        return PetSitterMapper.mapToPetSitterDto(petSitterRepository.getPetSitterById(petSitterId));
+    public void deletePetSitter(Long petSitterId) {
+        petSitterRepository.deleteById(petSitterId);
     }
 
     public List<OrderRequestDto> getOrderRequests(Long petSitterId) {
         PetSitter petSitter = petSitterRepository.getPetSitterById(petSitterId);
         return OrderRequestMapper.mapOrderRequestToOrderRequestList(petSitter.getOrderRequests().stream().toList());
+    }
+
+    public OrderRequestDto getOrderRequest(Long orderRequestId) {
+        return OrderRequestMapper.mapToOrderRequestDto(
+                orderRequestRepository.findById(orderRequestId)
+                        .orElseThrow(
+                                () -> new ResourceNotFoundException("No such orders")
+                        )
+        );
     }
 
     public void deleteOrderRequest(Long orderRequestId) {

@@ -29,14 +29,21 @@ public class PetSitterController {
         return petSitterService.createPetSitter(petSitterDto);
     }
 
-    @PutMapping({"{petSitterId}"})
-    public PetSitter updatePetSitter(@PathVariable Long petSitterId, @RequestBody @Valid PetSitterDto petSitterDto) {
-        return petSitterService.updatePetSitter(petSitterId, petSitterDto);
+    @GetMapping("/{petSitterId}")
+    public PetSitterDto getPetSitter(@PathVariable Long petSitterId) {
+        return petSitterService.getPetSitter(petSitterId);
     }
 
-    @GetMapping("/{petSitterId}")
-    public PetSitterDto getPetOwner(@PathVariable Long petSitterId) {
-        return petSitterService.getPetOwner(petSitterId);
+    @PutMapping({"/{petSitterId}"})
+    @ResponseStatus(HttpStatus.OK)
+    public void updatePetSitter(@PathVariable Long petSitterId, @RequestBody @Valid PetSitterDto petSitterDto) {
+        petSitterService.updatePetSitter(petSitterId, petSitterDto);
+    }
+
+    @DeleteMapping("/{petSitterId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePetSitter(@PathVariable Long petSitterId) {
+        petSitterService.deletePetSitter(petSitterId);
     }
 
     @GetMapping("{petSitterId}/orderRequests")
@@ -44,7 +51,13 @@ public class PetSitterController {
         return petSitterService.getOrderRequests(petSitterId);
     }
 
-    @DeleteMapping("{orderRequestId}") //after declining order request by pet sitter
+    @GetMapping("/{orderRequestId}")
+    public OrderRequestDto getOrderRequest(@PathVariable Long orderRequestId) {
+        return petSitterService.getOrderRequest(orderRequestId);
+    }
+
+    @DeleteMapping("{orderRequestId}")//after declining order request by pet sitter
+    @ResponseStatus(HttpStatus.OK)
     public void deleteOrderRequest(@PathVariable Long orderRequestId ) {
         petSitterService.deleteOrderRequest(orderRequestId);
     }
@@ -56,6 +69,7 @@ public class PetSitterController {
     }
 
     @PutMapping("orders/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
     public Order updateOrder(@PathVariable Long orderId, @RequestBody @Valid OrderDto orderDto) {
         return petSitterService.updateOrder(orderId, orderDto);
     }

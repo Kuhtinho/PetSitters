@@ -29,12 +29,23 @@ public class PetOwnerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PetOwner createPetOwner(@RequestBody @Valid PetOwnerDto petOwnerDto) {
-        return petOwnerService.newPetSitter(petOwnerDto);
+        return petOwnerService.createPetSitter(petOwnerDto);
+    }
+
+    @GetMapping("/{petOwnerId}")
+    public PetOwnerDto getPetOwner(@PathVariable Long petOwnerId) {
+        return petOwnerService.getPetOwner(petOwnerId);
     }
 
     @PutMapping({"{petOwnerId}"})
-    public PetOwner updatePetOwner(@PathVariable Long petOwnerId, @RequestBody @Valid PetOwnerDto petOwnerDto) {
-        return petOwnerService.updatePetOwner(petOwnerId, petOwnerDto);
+    public void updatePetOwner(@PathVariable Long petOwnerId, @RequestBody @Valid PetOwnerDto petOwnerDto) {
+        petOwnerService.updatePetOwner(petOwnerId, petOwnerDto);
+    }
+
+    @DeleteMapping("/{petOwnerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePetOwner(@PathVariable Long petOwnerId) {
+        petOwnerService.deletePetOwner(petOwnerId);
     }
 
     @GetMapping("/petSitters")
@@ -45,11 +56,6 @@ public class PetOwnerController {
                                                      @RequestParam(value = "till", required=false)
                                                          @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate tillDate) {
         return petOwnerService.getPetSittersByProperties(city, services, fromDate, tillDate);
-    }
-
-    @GetMapping("/{petOwnerId}")
-    public PetOwnerDto getPetOwner(@PathVariable Long petOwnerId) {
-        return petOwnerService.getPetOwner(petOwnerId);
     }
 
     @GetMapping("petSitters/{petSitterId}")
@@ -64,6 +70,7 @@ public class PetOwnerController {
     }
 
     @PutMapping("/orderRequests{id}")
+    @ResponseStatus(HttpStatus.OK)
     public OrderRequest updateOrderRequest(@PathVariable Long id, @RequestBody @Valid OrderRequestDto orderRequestDto) {
         return petOwnerService.updateOrderRequest(id, orderRequestDto);
     }
