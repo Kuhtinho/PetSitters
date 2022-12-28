@@ -1,58 +1,88 @@
 package kuchta.com.controller;
 
-import kuchta.com.model.Order;
-import kuchta.com.model.OrderRequest;
+import kuchta.com.controller.dto.OrderDto;
+import kuchta.com.controller.dto.OrderRequestDto;
+
+import kuchta.com.controller.dto.PetSitterDto;
+import kuchta.com.model.order.Order;
 import kuchta.com.model.petsitter.PetSitter;
-import kuchta.com.service.requestorder.OrderRequestService;
-import kuchta.com.service.requestorder.OrderService;
+import kuchta.com.service.order.OrderRequestService;
+import kuchta.com.service.order.OrderService;
 import kuchta.com.service.petsitter.PetSitterService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.List;
+
 @RestController
-@RequestMapping("/petsitters")
+@RequestMapping("/petSitters")
 public class PetSitterController {
 
-    @Autowired
-    PetSitterService petSitterService;
-    @Autowired
-    OrderRequestService orderRequestService;
-    @Autowired
-    OrderService orderService;
+    private final PetSitterService petSitterService;
+    private final OrderService orderService;
+    private final OrderRequestService orderRequestService;
 
+    public PetSitterController(PetSitterService petSitterService, OrderService orderService, OrderRequestService orderRequestService) {
+        this.petSitterService = petSitterService;
+        this.orderService = orderService;
+        this.orderRequestService = orderRequestService;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PetSitter createPetSitter(@RequestBody @Valid PetSitterDto petSitterDto) {
+        return petSitterService.createPetSitter(petSitterDto);
+    }
 
     @GetMapping("/{petSitterId}")
-    PetSitter getPetSitter(@PathVariable int petSitterId) {
+    public PetSitterDto getPetSitter(@PathVariable Long petSitterId) {
         return petSitterService.getPetSitter(petSitterId);
-/*          return json with all information about petsitter
-            (name, surname, address, mail, phone number, description, attachments)*/
     }
 
-    @GetMapping("/order-request/{petSitterId}")
-    OrderRequest getOrderRequest(@PathVariable int petSitterId) {
-        return orderRequestService.getOrderRequest(petSitterId);
-/*           return list of services,
-             type of contract (call/meet or sign the document),
-             date of service*/
+    @PutMapping({"/{petSitterId}"})
+    @ResponseStatus(HttpStatus.OK)
+    public void updatePetSitter(@PathVariable Long petSitterId, @RequestBody @Valid PetSitterDto petSitterDto) {
+        petSitterService.updatePetSitter(petSitterId, petSitterDto);
     }
 
-    @DeleteMapping("/order-request/{orderRequest}") //after declining order request by pet sitter
-    void deleteOrderRequest(@PathVariable int orderRequest) {
-        orderRequestService.deleteOrderRequest(orderRequest);
+    @DeleteMapping("/{petSitterId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePetSitter(@PathVariable Long petSitterId) {
+        petSitterService.deletePetSitter(petSitterId);
     }
 
-    @PostMapping("orders/") //after submitting order request by pet sitter
-    Order newOrder(@RequestBody Order newOrder) {
-        return orderService.addNewOrder(newOrder);
+    @GetMapping("/{petSitterId}/orderRequests")
+    public List<OrderRequestDto> getOrderRequests(@PathVariable Long petSitterId) {
+        return orderRequestService.getOrderRequests(petSitterId);
     }
 
-    @PutMapping("orders/{orderId}") //after submitting order by pet sitter
-    Order submitOrder(@PathVariable int orderId) {
-        return orderService.submitOrder(orderId);
+    @GetMapping("/{orderRequestId}")
+    public OrderRequestDto getOrderRequest(@PathVariable Long orderRequestId) {
+        return orderRequestService.getOrderRequest(orderRequestId);
     }
 
-    @DeleteMapping("/orders/{orderId}") //after declining order request by pet sitter
-    void deleteOrder(@PathVariable int orderId) {
-        orderService.deleteOrder(orderId);
+    @DeleteMapping("/{orderRequestId}")//after declining order request by pet sitter
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteOrderRequest(@PathVariable Long orderRequestId ) {
+        orderRequestService.deleteOrderRequest(orderRequestId);
     }
+
+    @PostMapping("/orders/")//after submitting order request by pet sitter
+    @ResponseStatus(HttpStatus.CREATED)
+    public Order createOrder(@RequestBody OrderDto orderDto) {
+        return orderService.newOrder(orderDto);
+    }
+
+    @GetMapping("/orders/{orderId}")
+    public OrderDto getOrder(@PathVariable Long orderId) {
+        return orderService.getOrder(orderId);
+    }
+
+    @PutMapping("/orders/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Order updateOrder(@PathVariable Long orderId, @RequestBody @Valid OrderDto orderDto) {
+        return orderService.updateOrder(orderId, orderDto);
+    }
+
 }

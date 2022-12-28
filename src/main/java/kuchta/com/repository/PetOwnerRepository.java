@@ -4,14 +4,9 @@ import kuchta.com.model.petowner.PetOwner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface PetOwnerRepository extends JpaRepository<PetOwner, Integer> {
+public interface PetOwnerRepository extends JpaRepository<PetOwner, Long> {
 
-    @Override
-    List<PetOwner> findAll();
-
-    PetOwner getPetOwnerById(Integer petOwnerId);
+    PetOwner getPetOwnerById(long id);
 
 }

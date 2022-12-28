@@ -1,17 +1,19 @@
 package kuchta.com.model.petowner;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import kuchta.com.model.order.Order;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 @Table(name = "pet_owners")
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PetOwner {
 
     @Id
@@ -20,13 +22,13 @@ public class PetOwner {
     private long id;
 
     @Column(name = "username")
-    private String userName;
+    private String username;
 
     @Column(name = "surname")
     private String surname;
 
     @Column(name = "birthdate")
-    private Date birthdate;
+    private LocalDate birthdate;
 
     @Column(name = "city")
     private String city;
@@ -35,7 +37,7 @@ public class PetOwner {
     private String email;
 
     @Column(name = "pesel")
-    private int pesel;
+    private String pesel;
 
     @Column(name = "postcode")
     private String postcode;
@@ -52,6 +54,13 @@ public class PetOwner {
     @Column(name = "home_description")
     private String homeDescription;
 
+    @Column(name = "pet_description")
+    private String petDescription;
+
     @Column(name = "pet_sitter_photo_id")
-    private int petSitterPhotoId;
+    private Long petOwnerPhotoId;
+
+    @OneToMany(mappedBy = "petOwner")
+    private List<Order> orders;
+
 }
