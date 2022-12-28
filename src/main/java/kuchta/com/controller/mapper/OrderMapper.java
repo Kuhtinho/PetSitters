@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class OrderMapper {
 
-    public static List<OrderDto> mapOrderToOrderDtoList(List<Order> orders) {
+    public static List<OrderDto> mapToOrderDtoList(List<Order> orders) {
         return orders.stream()
                 .map(OrderMapper::mapToOrderDto)
                 .collect(Collectors.toList());

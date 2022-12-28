@@ -8,11 +8,11 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "order_requests")
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderRequest {
 
     @Id

@@ -22,17 +22,12 @@ import java.util.Set;
 public class PetOwnerService {
 
     private final PetOwnerRepository petOwnerRepository;
-
     private final PetSitterRepository petSitterRepository;
 
-    private final OrderRequestRepository orderRequestRepository;
-
     public PetOwnerService(PetOwnerRepository petOwnerRepository,
-                           PetSitterRepository petSitterRepository,
-                           OrderRequestRepository orderRequestRepository) {
+                           PetSitterRepository petSitterRepository) {
         this.petOwnerRepository = petOwnerRepository;
         this.petSitterRepository = petSitterRepository;
-        this.orderRequestRepository = orderRequestRepository;
     }
 
     public PetOwner createPetSitter(PetOwnerDto petOwnerDto) {
@@ -75,24 +70,12 @@ public class PetOwnerService {
                         petSitter.getCity().equals(city) &&
                                 petSitter.getPetSitterServices().equals(services))
                 .toList();
-        return PetSitterMapper.mapPetSitterToPetSitterDtoList(neededPetSitters);
+        return PetSitterMapper.mapToPetSitterDtoList(neededPetSitters);
     }
 
     public PetSitterDto getPetSitter(Long petSitterId) { // get profile of suitable pet sitter from list
         return PetSitterMapper.mapToPetSitterDto(petSitterRepository.getPetSitterById(petSitterId));
     }
 
-    public OrderRequest updateOrderRequest(Long id, OrderRequestDto orderRequestDto) {
-        return orderRequestRepository.findById(id)
-                .map(orderRequest -> {
-                    orderRequest.setCost(orderRequestDto.cost());
-                    orderRequest.setDealType(orderRequestDto.dealType());
-                    orderRequest.setDays(orderRequestDto.days());
-                    return orderRequestRepository.save(orderRequest);
-                })
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Not found Order Request with id = " + id)
-                );
-    }
 }
 

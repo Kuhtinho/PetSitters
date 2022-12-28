@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class PetSitterMapper {
 
-    public static List<PetSitterDto> mapPetSitterToPetSitterDtoList(List<PetSitter> petSitters) {
+    public static List<PetSitterDto> mapToPetSitterDtoList(List<PetSitter> petSitters) {
         return petSitters.stream()
                 .map(PetSitterMapper::mapToPetSitterDto)
                 .collect(Collectors.toList());
@@ -48,4 +48,5 @@ public class PetSitterMapper {
                 .petSitterPhotoId(petSitterDto.petSitterPhotoId())
                 .build();
     }
+
 }

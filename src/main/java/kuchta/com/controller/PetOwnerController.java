@@ -7,7 +7,6 @@ import kuchta.com.controller.dto.PetSitterDto;
 import kuchta.com.model.order.OrderRequest;
 import kuchta.com.model.petowner.PetOwner;
 import kuchta.com.model.petsitter.service.Service;
-import kuchta.com.repository.OrderRepository;
 import kuchta.com.service.order.OrderRequestService;
 import kuchta.com.service.order.OrderService;
 import kuchta.com.service.petowner.PetOwnerService;
@@ -45,7 +44,8 @@ public class PetOwnerController {
         return petOwnerService.getPetOwner(petOwnerId);
     }
 
-    @PutMapping({"{petOwnerId}"})
+    @PutMapping({"/{petOwnerId}"})
+    @ResponseStatus(HttpStatus.OK)
     public void updatePetOwner(@PathVariable Long petOwnerId, @RequestBody @Valid PetOwnerDto petOwnerDto) {
         petOwnerService.updatePetOwner(petOwnerId, petOwnerDto);
     }
@@ -66,7 +66,7 @@ public class PetOwnerController {
         return petOwnerService.getPetSittersByProperties(city, services, fromDate, tillDate);
     }
 
-    @GetMapping("petSitters/{petSitterId}")
+    @GetMapping("/petSitters/{petSitterId}")
     public PetSitterDto getPetSitter(@PathVariable Long petSitterId) {
         return petOwnerService.getPetSitter(petSitterId);
     }
@@ -80,10 +80,10 @@ public class PetOwnerController {
     @PutMapping("/orderRequests{orderRequestId}")
     @ResponseStatus(HttpStatus.OK)
     public OrderRequest updateOrderRequest(@PathVariable Long orderRequestId, @RequestBody @Valid OrderRequestDto orderRequestDto) {
-        return petOwnerService.updateOrderRequest(orderRequestId, orderRequestDto);
+        return orderRequestService.updateOrderRequest(orderRequestId, orderRequestDto);
     }
 
-    @GetMapping("{petOwnerId}/orders")
+    @GetMapping("/{petOwnerId}/orders")
     public List<OrderDto> getOrders(@PathVariable Long petOwnerId) {
         return orderService.getOrders(petOwnerId);
     }

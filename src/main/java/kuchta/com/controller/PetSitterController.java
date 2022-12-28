@@ -23,7 +23,6 @@ public class PetSitterController {
     private final OrderService orderService;
     private final OrderRequestService orderRequestService;
 
-
     public PetSitterController(PetSitterService petSitterService, OrderService orderService, OrderRequestService orderRequestService) {
         this.petSitterService = petSitterService;
         this.orderService = orderService;
@@ -53,7 +52,7 @@ public class PetSitterController {
         petSitterService.deletePetSitter(petSitterId);
     }
 
-    @GetMapping("{petSitterId}/orderRequests")
+    @GetMapping("/{petSitterId}/orderRequests")
     public List<OrderRequestDto> getOrderRequests(@PathVariable Long petSitterId) {
         return orderRequestService.getOrderRequests(petSitterId);
     }
@@ -63,15 +62,15 @@ public class PetSitterController {
         return orderRequestService.getOrderRequest(orderRequestId);
     }
 
-    @DeleteMapping("{orderRequestId}")//after declining order request by pet sitter
+    @DeleteMapping("/{orderRequestId}")//after declining order request by pet sitter
     @ResponseStatus(HttpStatus.OK)
     public void deleteOrderRequest(@PathVariable Long orderRequestId ) {
         orderRequestService.deleteOrderRequest(orderRequestId);
     }
 
-    @PostMapping("orders/")//after submitting order request by pet sitter
+    @PostMapping("/orders/")//after submitting order request by pet sitter
     @ResponseStatus(HttpStatus.CREATED)
-    public Order newOrder(@RequestBody OrderDto orderDto) {
+    public Order createOrder(@RequestBody OrderDto orderDto) {
         return orderService.newOrder(orderDto);
     }
 
@@ -80,9 +79,10 @@ public class PetSitterController {
         return orderService.getOrder(orderId);
     }
 
-    @PutMapping("orders/{orderId}")
+    @PutMapping("/orders/{orderId}")
     @ResponseStatus(HttpStatus.OK)
     public Order updateOrder(@PathVariable Long orderId, @RequestBody @Valid OrderDto orderDto) {
         return orderService.updateOrder(orderId, orderDto);
     }
+
 }

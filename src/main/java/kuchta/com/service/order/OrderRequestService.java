@@ -17,7 +17,6 @@ public class OrderRequestService {
     private final OrderRequestRepository orderRequestRepository;
     private final PetSitterRepository petSitterRepository;
 
-
     public OrderRequestService(OrderRequestRepository orderRequestRepository, PetSitterRepository petSitterRepository) {
         this.orderRequestRepository = orderRequestRepository;
         this.petSitterRepository = petSitterRepository;
@@ -29,7 +28,7 @@ public class OrderRequestService {
 
     public List<OrderRequestDto> getOrderRequests(Long petSitterId) {
         PetSitter petSitter = petSitterRepository.getPetSitterById(petSitterId);
-        return OrderRequestMapper.mapOrderRequestToOrderRequestDtoList(petSitter.getOrderRequests());
+        return OrderRequestMapper.mapToOrderRequestDtoList(petSitter.getOrderRequests());
     }
 
     public OrderRequestDto getOrderRequest(Long orderRequestId) {
@@ -41,7 +40,21 @@ public class OrderRequestService {
         );
     }
 
+    public OrderRequest updateOrderRequest(Long orderRequestId, OrderRequestDto orderRequestDto) {
+        return orderRequestRepository.findById(orderRequestId)
+                .map(orderRequest -> {
+                    orderRequest.setCost(orderRequestDto.cost());
+                    orderRequest.setDealType(orderRequestDto.dealType());
+                    orderRequest.setDays(orderRequestDto.days());
+                    return orderRequestRepository.save(orderRequest);
+                })
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Not found Order Request with id = " + orderRequestId)
+                );
+    }
+
     public void deleteOrderRequest(Long orderRequestId) {
         orderRequestRepository.deleteById(orderRequestId);
     }
+
 }

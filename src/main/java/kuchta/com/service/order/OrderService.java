@@ -15,7 +15,6 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-
     private final PetOwnerRepository petOwnerRepository;
 
     public OrderService(OrderRepository orderRepository, PetOwnerRepository petOwnerRepository) {
@@ -37,7 +36,7 @@ public class OrderService {
 
     public List<OrderDto> getOrders(Long petSitterId) {
         PetOwner petOwner = petOwnerRepository.getPetOwnerById(petSitterId);
-        return OrderMapper.mapOrderToOrderDtoList(petOwner.getOrders());
+        return OrderMapper.mapToOrderDtoList(petOwner.getOrders());
     }
 
     public Order updateOrder(Long orderId, OrderDto orderDto) {
@@ -51,5 +50,6 @@ public class OrderService {
                         () -> new ResourceNotFoundException("Not found Order with id = " + orderId)
                 );
     }
+
 }
 

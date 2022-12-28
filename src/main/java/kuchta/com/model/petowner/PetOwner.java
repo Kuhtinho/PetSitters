@@ -9,11 +9,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "pet_owners")
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 @Getter
 @Setter
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PetOwner {
 
     @Id
@@ -62,4 +62,5 @@ public class PetOwner {
 
     @OneToMany(mappedBy = "petOwner")
     private List<Order> orders;
+
 }

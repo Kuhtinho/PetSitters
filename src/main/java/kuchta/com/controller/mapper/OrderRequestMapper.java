@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class OrderRequestMapper {
 
-    public static List<OrderRequestDto> mapOrderRequestToOrderRequestDtoList(List<OrderRequest> orderRequests) {
+    public static List<OrderRequestDto> mapToOrderRequestDtoList(List<OrderRequest> orderRequests) {
         return orderRequests.stream()
                 .map(OrderRequestMapper::mapToOrderRequestDto)
                 .collect(Collectors.toList());
@@ -37,4 +37,5 @@ public class OrderRequestMapper {
                 .dealType(orderRequestDto.dealType())
                 .build();
     }
+
 }

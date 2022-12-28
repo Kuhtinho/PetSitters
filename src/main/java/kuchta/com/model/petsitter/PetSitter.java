@@ -11,11 +11,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "pet_sitters")
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PetSitter {
 
     @Id
@@ -68,4 +68,5 @@ public class PetSitter {
 
     @OneToMany(mappedBy = "petSitter")
     private List<OrderRequest> orderRequests;
+
 }

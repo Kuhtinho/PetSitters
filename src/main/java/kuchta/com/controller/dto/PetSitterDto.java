@@ -8,7 +8,6 @@ import java.time.LocalDate;
 
 @Builder
 public record PetSitterDto (
-
         Long id,
         @Length(min = 2) String username,
         @Length(min = 2) String surname,

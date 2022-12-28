@@ -8,11 +8,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "services")
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 @Getter
 @Setter
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Service {
 
     @Id
