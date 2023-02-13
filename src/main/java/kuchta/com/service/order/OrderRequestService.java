@@ -1,51 +1,45 @@
 package kuchta.com.service.order;
 
-import kuchta.com.controller.dto.OrderRequestDto;
-import kuchta.com.controller.mapper.OrderRequestMapper;
 import kuchta.com.exceptions.ResourceNotFoundException;
 import kuchta.com.model.order.OrderRequest;
 import kuchta.com.model.petsitter.PetSitter;
 import kuchta.com.repository.OrderRequestRepository;
 import kuchta.com.repository.PetSitterRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderRequestService {
 
     private final OrderRequestRepository orderRequestRepository;
     private final PetSitterRepository petSitterRepository;
 
-    public OrderRequestService(OrderRequestRepository orderRequestRepository, PetSitterRepository petSitterRepository) {
-        this.orderRequestRepository = orderRequestRepository;
-        this.petSitterRepository = petSitterRepository;
+    public void createOrderRequest(OrderRequest orderRequest) {
+        orderRequestRepository.save(orderRequest);
     }
 
-    public OrderRequest createOrderRequest(OrderRequestDto orderRequestDto) {
-        return orderRequestRepository.save(OrderRequestMapper.mapToOrderRequest(orderRequestDto));
-    }
-
-    public List<OrderRequestDto> getOrderRequests(Long petSitterId) {
-        PetSitter petSitter = petSitterRepository.getPetSitterById(petSitterId);
-        return OrderRequestMapper.mapToOrderRequestDtoList(petSitter.getOrderRequests());
-    }
-
-    public OrderRequestDto getOrderRequest(Long orderRequestId) {
-        return OrderRequestMapper.mapToOrderRequestDto(
-                orderRequestRepository.findById(orderRequestId)
+    public OrderRequest getOrderRequest(Long orderRequestId) {
+        return orderRequestRepository.findById(orderRequestId)
                         .orElseThrow(
-                                () -> new ResourceNotFoundException("No such orders")
-                        )
+                                () -> new ResourceNotFoundException("No such order requests")
         );
     }
 
-    public OrderRequest updateOrderRequest(Long orderRequestId, OrderRequestDto orderRequestDto) {
-        return orderRequestRepository.findById(orderRequestId)
+    public List<OrderRequest> getOrderRequests(Long petSitterId) {
+        PetSitter petSitter = petSitterRepository.findById(petSitterId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Pet Sitter with id = " + petSitterId));
+        return petSitter.getOrderRequests();
+    }
+
+    public void updateOrderRequest(Long orderRequestId, OrderRequest newOrderRequest) {
+        orderRequestRepository.findById(orderRequestId)
                 .map(orderRequest -> {
-                    orderRequest.setCost(orderRequestDto.cost());
-                    orderRequest.setDealType(orderRequestDto.dealType());
-                    orderRequest.setDays(orderRequestDto.days());
+                    orderRequest.setCost(newOrderRequest.getCost());
+                    orderRequest.setDealType(newOrderRequest.getDealType());
+                    orderRequest.setDays(newOrderRequest.getDays());
                     return orderRequestRepository.save(orderRequest);
                 })
                 .orElseThrow(
