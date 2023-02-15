@@ -2,33 +2,26 @@ package kuchta.com.controller.mapper;
 
 import kuchta.com.controller.dto.OrderDto;
 import kuchta.com.model.order.Order;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class OrderMapper {
+@Mapper
+public interface OrderMapper {
+    OrderMapper INSTANCE = Mappers.getMapper( OrderMapper.class );
+    @Mapping(target="orderRequestId", source="orderRequestId")
+    @Mapping(target="petOwnerFeedback", source="petOwnerFeedback")
+    @Mapping(target = "petSitterFeedback", source = "petSitterFeedback")
+    @Mapping(target = "payed", source = "payed")
+    OrderDto toOrderDto(Order entity);
 
-    public static List<OrderDto> mapToOrderDtoList(List<Order> orders) {
-        return orders.stream()
-                .map(OrderMapper::mapToOrderDto)
-                .collect(Collectors.toList());
-    }
+    @Mapping(target="orderRequestId", source="orderRequestId")
+    @Mapping(target="petOwnerFeedback", source="petOwnerFeedback")
+    @Mapping(target = "petSitterFeedback", source = "petSitterFeedback")
+    @Mapping(target = "payed", source = "payed")
+    Order toOrder(OrderDto dto);
 
-    public static OrderDto mapToOrderDto(Order orderDto) {
-        return OrderDto.builder()
-                .orderRequestId(orderDto.getOrderRequestId())
-                .petOwnerFeedback(orderDto.getPetOwnerFeedback())
-                .petSitterFeedback(orderDto.getPetSitterFeedback())
-                .payed(orderDto.getPayed())
-                .build();
-    }
-
-    public static Order mapToOrder(OrderDto orderDto) {
-        return Order.builder()
-                .orderRequestId(orderDto.orderRequestId())
-                .petOwnerFeedback(orderDto.petOwnerFeedback())
-                .petSitterFeedback(orderDto.petSitterFeedback())
-                .payed(orderDto.payed())
-                .build();
-    }
+    List<OrderDto> map(List<Order> orders);
 }

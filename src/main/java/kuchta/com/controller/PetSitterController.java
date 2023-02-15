@@ -32,20 +32,20 @@ public class PetSitterController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createPetSitter(@RequestBody @Valid PetSitterDto petSitterDto) {
-        PetSitter petSitter = PetSitterMapper.mapToPetSitter(petSitterDto);
+        PetSitter petSitter = PetSitterMapper.INSTANCE.toPetSitter(petSitterDto);
         petSitterService.createPetSitter(petSitter);
     }
 
     @GetMapping("/{petSitterId}")
     public PetSitterDto getPetSitter(@PathVariable Long petSitterId) {
         PetSitter petSitter = petSitterService.getPetSitter(petSitterId);
-        return PetSitterMapper.mapToPetSitterDto(petSitter);
+        return PetSitterMapper.INSTANCE.toPetSitterDto(petSitter);
     }
 
     @PutMapping({"/{petSitterId}"})
     @ResponseStatus(HttpStatus.OK)
     public void updatePetSitter(@PathVariable Long petSitterId, @RequestBody @Valid PetSitterDto petSitterDto) {
-        PetSitter petSitter = PetSitterMapper.mapToPetSitter(petSitterDto);
+        PetSitter petSitter = PetSitterMapper.INSTANCE.toPetSitter(petSitterDto);
         petSitterService.updatePetSitter(petSitterId, petSitter);
     }
 
@@ -58,13 +58,13 @@ public class PetSitterController {
     @GetMapping("/{petSitterId}/orderRequests")
     public List<OrderRequestDto> getOrderRequests(@PathVariable Long petSitterId) {
         List<OrderRequest> orderRequests = orderRequestService.getOrderRequests(petSitterId);
-        return OrderRequestMapper.mapToOrderRequestDtoList(orderRequests);
+        return OrderRequestMapper.INSTANCE.map(orderRequests);
     }
 
     @GetMapping("/{orderRequestId}")
     public OrderRequestDto getOrderRequest(@PathVariable Long orderRequestId) {
         OrderRequest orderRequest = orderRequestService.getOrderRequest(orderRequestId);
-        return OrderRequestMapper.mapToOrderRequestDto(orderRequest);
+        return OrderRequestMapper.INSTANCE.toOrderRequestDto(orderRequest);
     }
 
     @DeleteMapping("/{orderRequestId}")//after declining order request by pet sitter
@@ -76,20 +76,20 @@ public class PetSitterController {
     @PostMapping("/orders/")//after submitting order request by pet sitter
     @ResponseStatus(HttpStatus.CREATED)
     public void createOrder(@RequestBody OrderDto orderDto) {
-        Order order = OrderMapper.mapToOrder(orderDto);
+        Order order = OrderMapper.INSTANCE.toOrder(orderDto);
         orderService.createOrder(order);
     }
 
     @GetMapping("/orders/{orderId}")
     public OrderDto getOrder(@PathVariable Long orderId) {
         Order order = orderService.getOrder(orderId);
-        return OrderMapper.mapToOrderDto(order);
+        return OrderMapper.INSTANCE.toOrderDto(order);
     }
 
     @PutMapping("/orders/{orderId}")
     @ResponseStatus(HttpStatus.OK)
     public void updateOrder(@PathVariable Long orderId, @RequestBody @Valid OrderDto orderDto) {
-        Order order = OrderMapper.mapToOrder(orderDto);
+        Order order = OrderMapper.INSTANCE.toOrder(orderDto);
         orderService.updateOrder(orderId, order);
     }
 
