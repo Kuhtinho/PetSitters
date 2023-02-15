@@ -38,20 +38,20 @@ public class PetOwnerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createPetOwner(@RequestBody @Valid PetOwnerDto petOwnerDto) {
-        PetOwner petOwner = PetOwnerMapper.mapToPetOwner(petOwnerDto);
+        PetOwner petOwner = PetOwnerMapper.INSTANCE.toPetOwner(petOwnerDto);
         petOwnerService.createPetOwner(petOwner);
     }
 
     @GetMapping("/{petOwnerId}")
     public PetOwnerDto getPetOwner(@PathVariable Long petOwnerId) {
         PetOwner petOwner = petOwnerService.getPetOwner(petOwnerId);
-        return PetOwnerMapper.mapToPetOwnerDto(petOwner);
+        return PetOwnerMapper.INSTANCE.toPetOwnerDto(petOwner);
     }
 
     @PutMapping({"/{petOwnerId}"})
     @ResponseStatus(HttpStatus.OK)
     public void updatePetOwner(@PathVariable Long petOwnerId, @RequestBody @Valid PetOwnerDto petOwnerDto) {
-        PetOwner petOwner = PetOwnerMapper.mapToPetOwner(petOwnerDto);
+        PetOwner petOwner = PetOwnerMapper.INSTANCE.toPetOwner(petOwnerDto);
         petOwnerService.updatePetOwner(petOwnerId, petOwner);
     }
 
@@ -69,33 +69,33 @@ public class PetOwnerController {
                                                      @RequestParam(value = "till", required=false)
                                                          @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate tillDate) {
         List<PetSitter> petSitters = petOwnerService.getPetSittersByProperties(city, services, fromDate, tillDate);
-        return PetSitterMapper.mapToPetSitterDtoList(petSitters);
+        return PetSitterMapper.INSTANCE.map(petSitters);
     }
 
     @GetMapping("/petSitters/{petSitterId}")
     public PetSitterDto getPetSitter(@PathVariable Long petSitterId) {
         PetSitter petSitter = petOwnerService.getPetSitter(petSitterId);
-        return PetSitterMapper.mapToPetSitterDto(petSitter);
+        return PetSitterMapper.INSTANCE.toPetSitterDto(petSitter);
     }
 
     @PostMapping("/orderRequests")
     @ResponseStatus(HttpStatus.CREATED)
     public void createOrderRequest(@RequestBody OrderRequestDto orderRequestDto) {
-        OrderRequest orderRequest = OrderRequestMapper.mapToOrderRequest(orderRequestDto);
+        OrderRequest orderRequest = OrderRequestMapper.INSTANCE.toOrderRequest(orderRequestDto);
         orderRequestService.createOrderRequest(orderRequest);
     }
 
     @PutMapping("/orderRequests{orderRequestId}")
     @ResponseStatus(HttpStatus.OK)
     public void updateOrderRequest(@PathVariable Long orderRequestId, @RequestBody @Valid OrderRequestDto orderRequestDto) {
-        OrderRequest orderRequest = OrderRequestMapper.mapToOrderRequest(orderRequestDto);
+        OrderRequest orderRequest = OrderRequestMapper.INSTANCE.toOrderRequest(orderRequestDto);
         orderRequestService.updateOrderRequest(orderRequestId, orderRequest);
     }
 
     @GetMapping("/{petOwnerId}/orders")
     public List<OrderDto> getOrders(@PathVariable Long petOwnerId) {
         List<Order> orders = orderService.getOrders(petOwnerId);
-        return OrderMapper.mapToOrderDtoList(orders);
+        return OrderMapper.INSTANCE.map(orders);
     }
 
 }

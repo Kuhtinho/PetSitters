@@ -2,44 +2,44 @@ package kuchta.com.controller.mapper;
 
 import kuchta.com.controller.dto.PetOwnerDto;
 import kuchta.com.model.petowner.PetOwner;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-public class PetOwnerMapper {
+@Mapper
+public interface PetOwnerMapper {
+    PetOwnerMapper INSTANCE = Mappers.getMapper( PetOwnerMapper.class );
+    @Mapping(target="id", source="id")
+    @Mapping(target="username", source="username")
+    @Mapping(target = "surname", source = "surname")
+    @Mapping(target = "birthdate", source = "birthdate",
+            dateFormat = "dd-MM-yyyy HH:mm:ss")
+    @Mapping(target = "pesel", source = "pesel")
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "city", source = "city")
+    @Mapping(target = "street", source = "street")
+    @Mapping(target = "streetNumber", source = "streetNumber")
+    @Mapping(target = "postcode", source = "postcode")
+    @Mapping(target = "userDescription", source = "userDescription")
+    @Mapping(target = "homeDescription", source = "homeDescription")
+    @Mapping(target = "petDescription", source = "petDescription")
+    @Mapping(target = "petOwnerPhotoId", source = "petOwnerPhotoId")
+    PetOwnerDto toPetOwnerDto(PetOwner entity);
 
-    public static PetOwner mapToPetOwner(PetOwnerDto petOwnerDto) {
-        return PetOwner.builder()
-                .id(petOwnerDto.id())
-                .username(petOwnerDto.username())
-                .surname(petOwnerDto.surname())
-                .birthdate(petOwnerDto.birthdate())
-                .pesel(petOwnerDto.pesel())
-                .email(petOwnerDto.email())
-                .city(petOwnerDto.city())
-                .street(petOwnerDto.street())
-                .streetNumber(petOwnerDto.streetNumber())
-                .postcode(petOwnerDto.postcode())
-                .userDescription(petOwnerDto.userDescription())
-                .homeDescription(petOwnerDto.homeDescription())
-                .petDescription(petOwnerDto.petDescription())
-                .petOwnerPhotoId(petOwnerDto.petOwnerPhotoId())
-                .build();
-    }
-
-    public static PetOwnerDto mapToPetOwnerDto(PetOwner petOwner) {
-        return PetOwnerDto.builder()
-                .id(petOwner.getId())
-                .username(petOwner.getUsername())
-                .surname(petOwner.getSurname())
-                .birthdate(petOwner.getBirthdate())
-                .pesel(petOwner.getPesel())
-                .email(petOwner.getEmail())
-                .city(petOwner.getCity())
-                .street(petOwner.getStreet())
-                .streetNumber(petOwner.getStreetNumber())
-                .postcode(petOwner.getPostcode())
-                .userDescription(petOwner.getUserDescription())
-                .homeDescription(petOwner.getHomeDescription())
-                .petDescription(petOwner.getPetDescription())
-                .petOwnerPhotoId(petOwner.getPetOwnerPhotoId())
-                .build();
-    }
+    @Mapping(target="id", source="id")
+    @Mapping(target="username", source="username")
+    @Mapping(target = "surname", source = "surname")
+    @Mapping(target = "birthdate", source = "birthdate",
+            dateFormat = "dd-MM-yyyy HH:mm:ss")
+    @Mapping(target = "pesel", source = "pesel")
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "city", source = "city")
+    @Mapping(target = "street", source = "street")
+    @Mapping(target = "streetNumber", source = "streetNumber")
+    @Mapping(target = "postcode", source = "postcode")
+    @Mapping(target = "userDescription", source = "userDescription")
+    @Mapping(target = "homeDescription", source = "homeDescription")
+    @Mapping(target = "petDescription", source = "petDescription")
+    @Mapping(target = "petOwnerPhotoId", source = "petOwnerPhotoId")
+    PetOwner toPetOwner(PetOwnerDto dto);
 }
